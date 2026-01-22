@@ -25,11 +25,15 @@ public class UserService {
         try {
             response = restTemplate.getForObject(BASE_URL + "?limit=1000", Map.class);
         } catch (Exception e) {
-            throw new RuntimeException("External API unreachable");
+            return new PaginationResponse<>(
+                    page, size, 0, 0, List.of()
+            );
         }
 
         if (response == null || !response.containsKey("users")) {
-            throw new RuntimeException("External API returned invalid response");
+            return new PaginationResponse<>(
+                    page, size, 0, 0, List.of()
+            );
         }
 
         List<Map<String, Object>> usersRaw =
@@ -47,6 +51,7 @@ public class UserService {
         Integer totalFromApi = (Integer) response.get("total");
         int totalItems = totalFromApi != null ? totalFromApi : users.size();
         int totalPages = (int) Math.ceil((double) totalItems / size);
+
         int fromIndex = (page - 1) * size;
         int toIndex = Math.min(fromIndex + size, users.size());
 

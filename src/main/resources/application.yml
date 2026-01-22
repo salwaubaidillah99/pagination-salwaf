@@ -4,3 +4,9 @@ server:
 spring:
   application:
     name: pagination-salwaf
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
